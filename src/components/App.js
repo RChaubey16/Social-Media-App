@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 
 import { fetchPosts } from '../actions/posts';
-import { Home, Navbar } from '.';
+import { Home, Navbar, Page404 } from '.';
 
 const Login = () => <div>Login</div>;
 
@@ -23,17 +23,20 @@ class App extends Component {
         <div>
           <Navbar />
 
-          <Route
-            exact
-            path="/"
-            render={(props) => {
-              // render is used to render the desired component along with necessary props.
-              // props argument stores the default props such as history, location, matched, params
-              return <Home {...props} posts={posts} />;
-            }}
-          />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={(props) => {
+                // render is used to render the desired component along with necessary props.
+                // props argument stores the default props such as history, location, matched, params
+                return <Home {...props} posts={posts} />;
+              }}
+            />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            <Route component={Page404} />
+          </Switch>
         </div>
       </Router>
     );
