@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
 import { fetchPosts } from '../actions/posts';
-import { PostsList, Navbar } from '.';
-
-const Home = () => <div>Home</div>;
+import { Home, Navbar } from '.';
 
 const Login = () => <div>Login</div>;
 
@@ -24,22 +22,16 @@ class App extends Component {
       <Router>
         <div>
           <Navbar />
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
 
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-
-            <li>
-              <Link to="/signup">SignUp</Link>
-            </li>
-          </ul>
-          {/* <PostsList posts={posts} /> */}
-
-          <Route exact path="/" component={Home} />
+          <Route
+            exact
+            path="/"
+            render={(props) => {
+              // render is used to render the desired component along with necessary props.
+              // props argument stores the default props such as history, location, matched, params
+              return <Home {...props} posts={posts} />;
+            }}
+          />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
         </div>
