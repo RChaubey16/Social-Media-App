@@ -139,33 +139,33 @@ export function editUserFailed(error) {
   };
 }
 
-export function editUSer(name, password, confirmPassword, userId) {
+export function editUser(name, password, confirmPassword, userId) {
   return (dispatch) => {
     const url = APIUrls.editProfile();
     fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Bearer ${getAuthTokenFromLocalStorage}`,
+        "Authorization": `Bearer ${getAuthTokenFromLocalStorage()}`,
       },
       body: getFormBody({
         name,
         password,
         confirm_password: confirmPassword,
         id: userId,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log('data >>>>> ', data);
-          if (data.success) {
-            dispatch(editUserSuccessful(data.data.user));
-            if (data.data.token) {
-              localStorage.setItem('token', data.data.token);
-            }
-            return;
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('data >>>>> ', data);
+        if (data.success) {
+          dispatch(editUserSuccessful(data.data.user));
+          if (data.data.token) {
+            localStorage.setItem('token', data.data.token);
           }
-          dispatch(editUserFailed(data.message));
-        }),
-    });
+          return;
+        }
+        dispatch(editUserFailed(data.message));
+      });
   };
 }

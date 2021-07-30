@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { editUser, clearAuthState } from '../actions/auth';
 
 class Settings extends Component {
   constructor(props) {
@@ -12,14 +13,25 @@ class Settings extends Component {
     };
   }
 
+  componentWillUnmount() {
+    this.props.dispatch(clearAuthState());
+  }
+
   handleChange = (fieldName, val) => {
     this.setState({
       [fieldName]: val, // example = name: "Raj", password: '123'
     });
   };
 
-  render() {
+  handleClick = () => {
+    const { name, password, confirmPassword } = this.state;
     const { user } = this.props.auth;
+
+    this.props.dispatch(editUser(name, password, confirmPassword, user._id));
+  };
+
+  render() {
+    const { user, error } = this.props.auth;
     const { editMode } = this.state;
     return (
       <div className="settings">
@@ -30,6 +42,12 @@ class Settings extends Component {
           />
         </div>
 
+        {error && <div className="alert error-dailog">{error}</div>}
+        {error === false && (
+          <div className="alert success-dailog">
+            Profile updated successfully !
+          </div>
+        )}
         <div className="field">
           <div classname="field-label">Email</div>
           <div classname="field-value">{user.email}</div>
@@ -41,7 +59,7 @@ class Settings extends Component {
             <input
               type="text"
               onChange={(e) => this.handleChange('name', e.target.value)}
-              value={user.name}
+              value={this.state.name}
             />
           ) : (
             <div classname="field-value">{user.name}</div>
@@ -76,7 +94,9 @@ class Settings extends Component {
 
         <div className="btn-grp">
           {editMode ? (
-            <button className="button save-btn">Save</button>
+            <button className="button save-btn" onClick={this.handleClick}>
+              Save
+            </button>
           ) : (
             <button
               className="button edit-btn"
