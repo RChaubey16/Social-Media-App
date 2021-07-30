@@ -11,12 +11,8 @@ import {
 import jwtDecode from 'jwt-decode';
 
 import { fetchPosts } from '../actions/posts';
-import { Home, Navbar, Page404, Login, Signup } from '.';
+import { Home, Navbar, Page404, Login, Signup, Settings } from '.';
 import { authenticateUser } from '../actions/auth';
-
-const Settings = () => {
-  return <div>Settings</div>;
-};
 
 const PrivateRoute = (privateRouteProps) => {
   const { isLoggedIn, path, component: Component } = privateRouteProps;
