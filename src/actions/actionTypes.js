@@ -28,3 +28,6 @@ export const ADD_FRIEND = 'ADD_FRIEND';
 export const REMOVE_FRIEND = 'REMOVE_FRIEND';
 // Add post
 export const ADD_POST = 'ADD_POST';
+
+// Add comment
+export const ADD_COMMENT = 'ADD_COMMENT';
