@@ -1,6 +1,11 @@
 // Will handle all the actions related to posts and take necessary steps
 
-import { UPDATE_POSTS, ADD_POST, ADD_COMMENT } from '../actions/actionTypes';
+import {
+  UPDATE_POSTS,
+  ADD_POST,
+  ADD_COMMENT,
+  UPDATE_POST_LIKE,
+} from '../actions/actionTypes';
 
 export default function posts(state = [], action) {
   switch (action.type) {
@@ -20,6 +25,17 @@ export default function posts(state = [], action) {
         return post;
       });
       return newPosts;
+    case UPDATE_POST_LIKE:
+      const updatedPosts = state.map((post) => {
+        if (post._id === action.postId) {
+          return {
+            ...post,
+            likes: [...post.likes, action.userId],
+          };
+        }
+        return post;
+      });
+      return updatedPosts;
     default:
       return state;
     // we may switch the post reducer from array to JSON
