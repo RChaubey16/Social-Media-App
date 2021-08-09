@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Comment } from '.';
-import { createComment } from '../actions/posts';
+import { addLike, createComment } from '../actions/posts';
 
 class Post extends Component {
   constructor(props) {
@@ -33,9 +33,15 @@ class Post extends Component {
     });
   };
 
+  handleLikeClick = () => {
+    const { post, user } = this.props;
+    this.props.dispatch(addLike(post._id, user._id));
+  };
+
   render() {
-    const { post } = this.props;
+    const { post, user } = this.props;
     const { comment } = this.state;
+    const isPostLikedByUser = post.likes.includes(user._id);
 
     return (
       <div className="post-wrapper" key={post._id}>
@@ -55,14 +61,21 @@ class Post extends Component {
           <div className="post-content">{post.content}</div>
 
           <div className="post-actions">
-            <div className="post-like">
-              <img
-                src="https://image.flaticon.com/icons/svg/1077/1077035.svg"
-                alt="likes-icon"
-              />
-              <span>{post.likes.length}</span>
-            </div>
+            <button className="post-like no-btn" onClick={this.handleLikeClick}>
+              {isPostLikedByUser ? (
+                <img
+                  src="https://image.flaticon.com/icons/png/512/833/833472.png"
+                  alt="Liked-Post-Icon"
+                />
+              ) : (
+                <img
+                  src="https://image.flaticon.com/icons/svg/1077/1077035.svg"
+                  alt="likes-icon"
+                />
+              )}
 
+              <span>{post.likes.length}</span>
+            </button>
             <div className="post-comments-icon">
               <img
                 src="https://image.flaticon.com/icons/svg/1380/1380338.svg"
@@ -95,4 +108,10 @@ Post.propTypes = {
   post: PropTypes.object.isRequired,
 };
 
-export default connect()(Post);
+function mapStateToProps({ auth }) {
+  return {
+    user: auth.user,
+  };
+}
+
+export default connect(mapStateToProps)(Post);
